@@ -9,10 +9,12 @@ class Desenvolvedor extends Model
 {
     use HasFactory;
 
+    protected $table = 'desenvolvedores';
     protected $fillable = [
         'nome',
         'sexo',
         'data_nascimento',
+        'hobby',
         'nivel_id',
     ];
 

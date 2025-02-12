@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Desenvolvedor;
 use Illuminate\Http\Request;
 
 class DesenvolvedorController extends Controller
@@ -27,7 +28,21 @@ class DesenvolvedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $devData = $request->validate([
+            'nivel_id'=> 'required|exists:niveis,id',
+            'nome' => 'required|string|max:100',
+            'sexo' => 'required|in:F,M',
+            'data_nascimento' => 'required|date',
+            'hobby' => 'required|string|max:255'
+        ]);
+
+        $desenvolvedor = Desenvolvedor::create($devData);
+
+        return response()->json([
+            'message' => 'Dev registrado com sucesso! ',
+            'dev' => $desenvolvedor
+        ], 201);
+
     }
 
     /**

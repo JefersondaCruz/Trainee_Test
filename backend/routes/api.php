@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DesenvolvedorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NivelController;
@@ -27,3 +28,5 @@ Route::Get('/niveis', [NivelController::class, 'index']);
 Route::delete('/niveis/{id}', [NivelController::class, 'destroy']);
 
 Route::Patch('/niveis/{id}', [NivelController::class, 'update']);
+
+Route::post('/desenvolvedores',[DesenvolvedorController::class, 'store']);
