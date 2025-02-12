@@ -3,20 +3,20 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
+  <div id="app">
+    <header>
+      <h1>Gerenciamento de Desenvolvedores</h1>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <router-link to="/">Home</router-link>
+        <router-link to="/desenvolvedor">Desenvolvedores</router-link>
+        <router-link to="/niveis">Níveis</router-link>
       </nav>
-    </div>
-  </header>
-
-  <main>
-    <RouterView />
-  </main>
+    </header>
+    <main>
+      <RouterView />
+    </main>
+  </div>
+  
 </template>
 
 <style scoped>
@@ -24,34 +24,37 @@ import { RouterLink, RouterView } from 'vue-router'
   margin: 0;
   padding: 0;
 }
-
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
-  padding: 20px;
+  color: #2c3e50;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+header {
+  background-color: #35495e;
+  padding: 20px;
+  color: white;
 }
 
 nav {
-  display: flex;
-  gap: 20px;
+  margin: 20px 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: #42b983;
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  width: 100%;
+  margin-top: 40px;
 }
 
 </style>

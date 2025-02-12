@@ -19,7 +19,17 @@ const router = createRouter({
       meta: {
         title: 'About'
       }
-    }
+    },
+    {
+      path: '/desenvolvedor',
+      name: 'Desenvolvedor',
+      component: () => import('../views/DesenvolvedorView.vue')
+    },
+    {
+      path: '/niveis',
+      name: 'Niveis',
+      component: () => import('../views/NiveisView.vue')
+    },
   ]
 })
 
