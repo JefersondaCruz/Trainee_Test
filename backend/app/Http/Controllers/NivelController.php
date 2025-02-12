@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class NivelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $show = Nivel::all();
@@ -23,17 +20,6 @@ class NivelController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $nivelData =  $request->validate( [
@@ -59,25 +45,6 @@ class NivelController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $nivel = Nivel::find($id);
@@ -100,12 +67,8 @@ class NivelController extends Controller
             'message' => 'nivel atualizado com sucesso',
             'Nivel' => $nivel
         ], 200);
-
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $nivel = Nivel::find($id);
@@ -120,6 +83,7 @@ class NivelController extends Controller
                 'message' => 'não e possivel excluir este nivel, pois há desenvolvedores associados',
             ],400);
         }
+
         $nivel->delete();
         return response()->json([
             'message' => 'Nivel excluído com sucesso!',
