@@ -75,7 +75,28 @@ class DesenvolvedorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $devData = Desenvolvedor::find($id);
+
+        if(!$devData) {
+            return response()->json([
+                'Message' => 'desenvolvedor não encontrado'
+            ],404);
+        }
+
+            $Data = $request->validate([
+                'nivel_id'=> 'required|exists:niveis,id',
+                'nome' => 'required|string|max:100',
+                'sexo' => 'required|in:F,M',
+                'data_nascimento' => 'required|date',
+                'hobby' => 'required|string|max:255'
+            ]);
+
+            $devData->update($Data);
+
+            return response()->json([
+                'message' => 'Desenvolvedor atualizado com sucesso',
+                'desenvolvedor' => $devData
+            ], 200);
     }
 
     /**

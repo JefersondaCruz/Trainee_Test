@@ -29,3 +29,4 @@ Route::Patch('/niveis/{id}', [NivelController::class, 'update']);
 Route::post('/desenvolvedores',[DesenvolvedorController::class, 'store']);
 Route::Get('/desenvolvedores',[DesenvolvedorController::class, 'index']);
 Route::delete('/desenvolvedores/{id}', [DesenvolvedorController::class, 'destroy']);
+Route::Put('/desenvolvedores/{id}', [DesenvolvedorController::class, 'update']);
