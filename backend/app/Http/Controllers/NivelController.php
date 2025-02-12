@@ -114,6 +114,12 @@ class NivelController extends Controller
                 'message' => 'Nivel não encontrado!',
             ],  404);
         }
+
+        if ($nivel->Desenvolvedores()->exists()) {
+            return response()->json([
+                'message' => 'não e possivel excluir este nivel, pois há desenvolvedores associados',
+            ],400);
+        }
         $nivel->delete();
         return response()->json([
             'message' => 'Nivel excluído com sucesso!',
