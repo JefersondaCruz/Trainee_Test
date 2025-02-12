@@ -25,3 +25,5 @@ Route::post('/niveis', [NivelController::class, 'store']);
 Route::Get('/niveis', [NivelController::class, 'index']);
 
 Route::delete('/niveis/{id}', [NivelController::class, 'destroy']);
+
+Route::Patch('/niveis/{id}', [NivelController::class, 'update']);

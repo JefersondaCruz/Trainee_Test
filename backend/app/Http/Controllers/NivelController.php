@@ -80,9 +80,27 @@ class NivelController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $nivelUP = $request->validate([
+        $nivel = Nivel::find($id);
+
+        if (!$nivel) {
+            return response()->json([
+                'message' => 'Nivel não encontrado',
+            ], 400);
+        }
+
+        $request->validate([
             'nivel' => 'required|string|max:100'
         ]);
+
+        $nivel->update([
+            'nivel' => $request->nivel,
+        ]);
+
+        return response()->json([
+            'message' => 'nivel atualizado com sucesso',
+            'Nivel' => $nivel
+        ], 200);
+
     }
 
     /**
