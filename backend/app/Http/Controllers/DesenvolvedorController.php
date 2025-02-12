@@ -12,7 +12,16 @@ class DesenvolvedorController extends Controller
      */
     public function index()
     {
-        //
+        $show = Desenvolvedor::all();
+        if($show->isEmpty()){
+            return response()->json([
+                'message' => 'nenhum Desenvolvedor Cadastrado'
+            ],404);
+        }
+
+        return response()->json([
+            'desenvolvedores' => $show,
+        ],200);
     }
 
     /**
