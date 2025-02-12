@@ -83,6 +83,16 @@ class DesenvolvedorController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $devData = Desenvolvedor::find($id);
+
+        if (!$devData) {
+            return response()->json([
+                'message' => 'Desenvolvedor não encontrado'
+            ],400);
+        }
+        $devData->delete();
+        return response()->json([
+            'message' => 'desenvolvedor removido com sucesso'
+        ],200);
     }
 }

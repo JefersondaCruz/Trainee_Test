@@ -22,12 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/niveis', [NivelController::class, 'store']);
-
 Route::Get('/niveis', [NivelController::class, 'index']);
-
 Route::delete('/niveis/{id}', [NivelController::class, 'destroy']);
-
 Route::Patch('/niveis/{id}', [NivelController::class, 'update']);
 
 Route::post('/desenvolvedores',[DesenvolvedorController::class, 'store']);
 Route::Get('/desenvolvedores',[DesenvolvedorController::class, 'index']);
+Route::delete('/desenvolvedores/{id}', [DesenvolvedorController::class, 'destroy']);
