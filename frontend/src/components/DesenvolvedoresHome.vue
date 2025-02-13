@@ -1,19 +1,24 @@
 <template>
-    <div class="container">
-        <h2>Página de Desenvolvedores</h2>
-        <p>Aqui você pode gerenciar os desenvolvedores.</p>
-        
-        <button class="btn register">Registrar Desenvolvedor</button>
-        
-        <ul class="developer-list">
-            <li v-for="developer in developers" :key="developer.id" class="developer-item">
-                <span>{{ developer.name }}</span>
-                <div>
-                    <button class="btn edit" @click="editDeveloper(developer.id)">Editar</button>
-                    <button class="btn delete" @click="removeDeveloper(developer.id)">Remover</button>
-                </div>
-            </li>
-        </ul>
+    <div>
+        <router-link to="/" class="button-back">
+            Voltar <span class="icon"></span>
+        </router-link>
+        <div class="container">
+            <h2>Página de Desenvolvedores</h2>
+            <p>Aqui você pode gerenciar os desenvolvedores.</p>
+            
+            <button class="btn register">Registrar Desenvolvedor</button>
+            
+            <ul class="developer-list">
+                <li v-for="developer in developers" :key="developer.id" class="developer-item">
+                    <span>{{ developer.name }}</span>
+                    <div>
+                        <button class="btn edit" @click="editDeveloper(developer.id)">Editar</button>
+                        <button class="btn delete" @click="removeDeveloper(developer.id)">Remover</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -40,7 +45,10 @@ export default {
 </script>
 
 <style scoped>
+
+
 .container {
+    min-height: 80vh;
     max-width: 600px;
     margin: 20px auto;
     background: #35495e;
@@ -49,7 +57,21 @@ export default {
     border-radius: 8px;
 }
 
-h2 {
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(../src/assets/capaDEV.jpg);
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
+    z-index: -1;
+}
+
+h2, p {
     text-align: center;
     margin-bottom: 10px;
 }
@@ -93,5 +115,23 @@ h2 {
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 5px;
+}
+
+.button-back {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    text-decoration: none;
+    color: #fff;
+    padding: 25px;
+}
+
+.button-back span {
+    width: 24px;
+    height: 24px;
+    background-image: url('../assets/icons/picareta.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 8px;
 }
 </style>

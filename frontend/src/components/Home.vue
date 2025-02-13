@@ -1,17 +1,17 @@
 <template>
-  <div id="home">
-    <nav>
-      <router-link to="/desenvolvedor" class="mc-button">
-        <div class="title">Desenvolvedores</div>
-      </router-link>
-      <router-link to="/niveis" class="mc-button">
-        <div class="title">Níveis</div>
-      </router-link>
-    </nav>
-    <main>
-      <RouterView />
-    </main>
-  </div>
+    <div id="home">
+      <nav>
+        <router-link to="/desenvolvedor" class="mc-button">
+          <div class="title">Desenvolvedores</div>
+        </router-link>
+        <router-link to="/niveis" class="mc-button">
+          <div class="title">Níveis</div>
+        </router-link>
+      </nav>
+      <main>
+        <RouterView />
+      </main>
+    </div>
 </template>
 
 <script setup>
