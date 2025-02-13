@@ -23,34 +23,68 @@ import { RouterLink, RouterView } from 'vue-router'
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #2c3e50;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
+
+#app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(../src/assets/capaDev.jpeg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  z-index: -1;
+}
+
 
 header {
   background-color: #35495e;
-  padding: 20px;
+  padding: 30px;
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 1.8em;
+  font-weight: bold;
 }
 
 nav {
-  margin: 20px 0;
+  display: flex;
+  gap: 15px;
 }
 
 nav a {
   color: white;
+  font-size: 1.4em;
   text-decoration: none;
-  margin: 0 15px;
   padding: 10px 15px;
   border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+  font-weight: bold;
   transition: background-color 0.3s;
 }
 
 nav a:hover {
   background-color: #42b983;
+  transform: scale(1.1);
 }
 
 main {
