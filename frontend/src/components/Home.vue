@@ -1,6 +1,9 @@
 <template>
     <div id="home">
       <nav>
+        <div class="img-capa">
+          <img src="@/assets/capa1.png" alt="Imagem de capa">
+        </div>
         <router-link to="/desenvolvedor" class="mc-button">
           <div class="title">Desenvolvedores</div>
         </router-link>
@@ -11,6 +14,10 @@
       <main>
         <RouterView />
       </main>
+      <footer>
+        <h2 class="left-side"> Jeferson&copy;2025</h2>
+        <h2 class="right-side"> Traine-Test</h2>
+      </footer>
     </div>
 </template>
 
@@ -32,7 +39,7 @@
   background-position: center;
   position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column; 
   align-items: center;
 }
 
@@ -86,7 +93,9 @@ nav {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 5px;
+  flex-direction: column;
+  align-items: center;
 }
 
 nav a {
@@ -111,5 +120,43 @@ nav a:active {
 
 main {
   margin-top: 40px;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  color: white;
+}
+
+.left-side {
+  margin-left: 20px;
+  font-size: 1.2em;
+}
+
+.right-side {
+  margin-right: 20px;
+  font-size: 1.2em;
+}
+
+
+.img-capa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+  max-height: 300px;
+  margin-bottom: 10px;
+}
+
+.img-capa img {
+  max-width: 600px;
+  height: auto;
 }
 </style>
