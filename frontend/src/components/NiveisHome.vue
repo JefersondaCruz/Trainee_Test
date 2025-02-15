@@ -241,7 +241,7 @@ export default {
 </script>
 
 <style scoped>
-    .container {
+.container {
     min-height: 80vh;
     max-width: 600px;
     margin: 20px auto;
