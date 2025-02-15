@@ -24,7 +24,7 @@ export const GetNiveis = async () => {
 
 export const UpdateNivel = async (id, nivel) => {
     try {
-        const response = await laravelApi.put(`/niveis/${id}`, {
+        const response = await laravelApi.patch(`/niveis/${id}`, {
             nivel,
         })
         return response;

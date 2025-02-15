@@ -11,7 +11,7 @@
             <li v-for="Nivel in Niveis" :key="Nivel.id" class="developer-item">
             <span>{{ Nivel.nivel }}</span>
                 <div>
-                    <button class="btn edit">Editar</button>
+                    <button class="btn edit" @click="OpenModalEdit(Nivel)">Editar</button>
                     <button class="btn delete" type="submit" @click="removeNivel(Nivel.id)">Remover</button>
                 </div>
             </li>
@@ -43,6 +43,32 @@
                 </div>
             </div>
         </div>
+        <div v-if="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Atualizar Nível</h5>
+                        <button type="button" class="close" @click="closeModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="name">Nome do Nível:</label>
+                        <input type="text" class="form-control" v-model="selectedNivel.name" />
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary" 
+                            @click="updateNivelSubmit"
+                        >
+                            Atualizar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @click="closeModal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -68,10 +94,15 @@ export default {
             }
         },
 
-        OpenModal() {
+        async OpenModal() {
             this.selectedNivel = { name:"" };
             this.showModal = true;
         },
+        async OpenModalEdit(Nivel) {
+            this.selectedNivel = {id: Nivel.id, name: Nivel.nivel };
+            this.showModal = true;
+        },
+
         closeModal() {
             this.showModal = false;
         },
@@ -93,6 +124,16 @@ export default {
             try {
                 const response = await DeleteNivel(id);
                 console.log("Resposta do delete", response);
+                this.getNiveis();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async updateNivelSubmit() {
+            try {
+                console.log("nivel id: ",this.selectedNivel.id,"nivel name", this.selectedNivel.name);
+                const response = await UpdateNivel(this.selectedNivel.id, this.selectedNivel.name);
+                console.log("Resposta do update", response);
                 this.getNiveis();
             } catch (error) {
                 console.error(error);
