@@ -9,7 +9,7 @@ class NivelController extends Controller
 {
     public function index()
     {
-        $show = Nivel::all();
+        $show = Nivel::with('Desenvolvedores')->get();
         if ($show->isEmpty()) {
             return response()->json ([
                 'message' => 'Nenhum nivel cadastrado!',
