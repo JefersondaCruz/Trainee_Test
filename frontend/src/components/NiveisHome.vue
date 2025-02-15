@@ -158,10 +158,8 @@ export default {
         },
 
         async getNiveis() {
-            console.log("getNiveis");
             try {
                 const response = await GetNiveis();
-                console.log("respota do get", response);
                 this.Niveis = response.data.Niveis;
             } catch (error) {
                 console.error(error);
@@ -169,20 +167,17 @@ export default {
         },
 
         async removeNivel(id) {
-            console.log('ID do nível:', id);
             const nivel = this.Niveis.find((nivel) => nivel.id === id);
             if (nivel && nivel.desenvolvedores.length > 0) {
                 this.showToast("Não é possível excluir um nivel com desenvolvedores associados!", "error");
                 return;
             }
-            console.log('Chamando openDeleteConfirmationModal');
             this.openDeleteConfirmationModal(id);
         },
 
         async deleteNivelSubmit() {
             try {
                 const response = await DeleteNivel(this.nivelToDelete);
-                console.log("Resposta do delete", response);
                 this.getNiveis();
                 this.closeDeleteConfirmationModal();
                 this.showToast("Nível excluído com sucesso!", "success");
@@ -193,9 +188,7 @@ export default {
 
         openDeleteConfirmationModal(nivelId) {
             this.nivelToDelete = nivelId;
-            console.log('Nivel a ser excluido: ', this.nivelToDelete);
             this.showDeleteConfirmation = true;
-            console.log('modal aberto', this.showDeleteConfirmation);
         },
         closeDeleteConfirmationModal() {
             this.showDeleteConfirmation = false;
@@ -204,9 +197,7 @@ export default {
 
         async updateNivelSubmit() {
             try {
-                console.log("nivel id: ",this.selectedNivel.id,"nivel name", this.selectedNivel.name);
                 const response = await UpdateNivel(this.selectedNivel.id, this.selectedNivel.name);
-                console.log("Resposta do update", response);
                 this.closeModal();
                 this.showToast("Nivel atualizado com sucesso!", "success");
                 this.getNiveis();
@@ -240,11 +231,10 @@ export default {
             this.showModalEdit = false;
             this.showConfirmation = false;
         },
-        
+
     },
         mounted() {
             this.getNiveis();
-            console.log("componente mounted, chamadn get niveis");
         },
     
 }
