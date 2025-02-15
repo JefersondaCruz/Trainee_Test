@@ -17,7 +17,7 @@
             </li>
         </ul>
         </div>
-        <div v-if="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div v-if="showModalRegister" class="modal fade show d-block" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -58,13 +58,34 @@
                     </div>
                     <div class="modal-footer">
                         <button 
-                            type="submit" 
-                            class="btn btn-primary" 
-                            @click="updateNivelSubmit"
+                            type="button"
+                            class="btn btn-primary"
+                            @click="confirmUpdate"
                         >
                             Atualizar
                         </button>
                         <button type="button" class="btn btn-secondary" @click="closeModal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="showConfirmation" class="modal fade show d-block" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Atualização</h5>
+                        <button type="button" class="close" @click="closeConfirmationModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Você tem certeza que deseja atualizar este nível?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="updateNivelSubmit">
+                            Sim, Atualizar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @click="closeConfirmationModal">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -74,37 +95,57 @@
 
 <script>
 import { RegisterNivel, GetNiveis, UpdateNivel, DeleteNivel } from '@/services/NiveisService';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
 
 export default {
     data() {
         return {
             Niveis: [],
             showModal: false,
+            showModalRegister: false,
+            showModalEdit: false,
+            showConfirmation: false,
             selectedNivel: { name: "" },
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroudColor: type === "success" ? "green" : "red",
+                onClick: () => this.closeModal(),
+            }).showToast();
+        },
+
         async RegistrationSubmit() {
             try {
                 const response = await RegisterNivel(this.selectedNivel.name);
-                console.log(response);
-                console.log("Nivel Registrado com sucesso!");
+                this.closeModal();
+                this.showToast("Nivel Registrado com sucesso!");
             } catch (error) {
                 console.error(error);
             }
         },
 
-        async OpenModal() {
+        OpenModal() {
             this.selectedNivel = { name:"" };
-            this.showModal = true;
+            this.showModalRegister = true;
         },
-        async OpenModalEdit(Nivel) {
+        OpenModalEdit(Nivel) {
             this.selectedNivel = {id: Nivel.id, name: Nivel.nivel };
-            this.showModal = true;
+            this.showModalEdit = true;
         },
 
         closeModal() {
-            this.showModal = false;
+            this.showModalRegister = false;
+            this.showModalEdit = false;
+            this.showConfirmation = false;
         },
         
         
@@ -120,6 +161,11 @@ export default {
             }
         },
 
+        confirmUpdate() {
+            this.showModalEdit = false;
+            this.showConfirmation = true; 
+        },
+
         async removeNivel(id) {
             try {
                 const response = await DeleteNivel(id);
@@ -128,6 +174,10 @@ export default {
             } catch (error) {
                 console.error(error);
             }
+        },
+        closeConfirmationModal() {
+            this.showConfirmation = false;
+            this.showModalEdit = true; 
         },
         async updateNivelSubmit() {
             try {
