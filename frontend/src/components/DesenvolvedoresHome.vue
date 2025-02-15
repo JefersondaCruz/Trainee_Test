@@ -23,25 +23,28 @@
 </template>
 
 <script>
+import { RegisterDev } from '@/services/DevServices';
+
 export default {
     data() {
         return {
-            developers: [
-                { id: 1, name: 'João Silva' },
-                { id: 2, name: 'Maria Oliveira' },
-                { id: 3, name: 'Carlos Souza' }
-            ]
+            desenvolvedores: [],
+            selectedDev: { nome: "", sexo: "", data_nascimento: "", hobby: "" },
         };
     },
     methods: {
-        editDeveloper(id) {
-            alert(`Editar desenvolvedor ID: ${id}`);
+        async RegisterDevSubmit() {
+            try {
+                const response = await RegisterDev(this.selectedDev.nome, this.selectedDev.sexo, this.selectedDev.data_nascimento, this.selectedDev.hobby);
+                this.closeModal();
+                this.showToast("Desenvolvedor Registrado com sucesso!", "success");
+                this.getDesenvolvedores();
+            } catch (error) {
+                console.error(error);
+            }
         },
-        removeDeveloper(id) {
-            this.developers = this.developers.filter(dev => dev.id !== id);
-        }
     }
-};
+}
 </script>
 
 <style scoped>

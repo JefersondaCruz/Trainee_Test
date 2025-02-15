@@ -1,13 +1,13 @@
 import laravelApi from "./HttpService";
 
 
-export const RegisterDev = async (nome, nivel, email, cpf) => {
+export const RegisterDev = async (nome, sexo, data_nascimento, hobby) => {
     try {
         const response = await laravelApi.post("/desenvolvedores", {
             nome,
-            nivel,
-            email,
-            cpf,
+            sexo,
+            data_nascimento,
+            hobby,
         })
         return response;
     } catch (error) {
