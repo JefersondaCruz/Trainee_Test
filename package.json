@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "toastify-js": "^1.12.0",
+    "vue-toastification": "^0.1.2"
+  }
+}

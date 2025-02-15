@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Desenvolvedor;
 
 class Nivel extends Model
 {
@@ -15,7 +16,7 @@ class Nivel extends Model
         'nivel',
     ];
 
-    public function Desenvolvedor(){
+    public function Desenvolvedores(){
         return $this->hasMany(Desenvolvedor::class, 'nivel_id');
     }
 }
