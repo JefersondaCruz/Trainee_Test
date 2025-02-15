@@ -90,6 +90,27 @@
                 </div>
             </div>
         </div>
+        <div v-if="showDeleteConfirmation" class="modal fade show d-block" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Exclusão</h5>
+                        <button type="button" class="close" @click="closeDeleteConfirmationModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Você tem certeza que deseja excluir este nível?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="deleteNivelSubmit">
+                            Sim, Excluir
+                        </button>
+                        <button type="button" class="btn btn-secondary" @click="closeDeleteConfirmationModal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -107,6 +128,8 @@ export default {
             showModalRegister: false,
             showModalEdit: false,
             showConfirmation: false,
+            showDeleteConfirmation: false,
+            nivelToDelete: null,
             selectedNivel: { name: "" },
         };
     },
@@ -118,7 +141,7 @@ export default {
                 close: true,
                 gravity: "top",
                 position: "center",
-                backgroudColor: type === "success" ? "green" : "red",
+                backgroundColor: type === "success" ? "green" : "red",
                 onClick: () => this.closeModal(),
             }).showToast();
         },
@@ -127,28 +150,12 @@ export default {
             try {
                 const response = await RegisterNivel(this.selectedNivel.name);
                 this.closeModal();
-                this.showToast("Nivel Registrado com sucesso!");
+                this.showToast("Nivel Registrado com sucesso!", "success");
+                this.getNiveis();
             } catch (error) {
                 console.error(error);
             }
         },
-
-        OpenModal() {
-            this.selectedNivel = { name:"" };
-            this.showModalRegister = true;
-        },
-        OpenModalEdit(Nivel) {
-            this.selectedNivel = {id: Nivel.id, name: Nivel.nivel };
-            this.showModalEdit = true;
-        },
-
-        closeModal() {
-            this.showModalRegister = false;
-            this.showModalEdit = false;
-            this.showConfirmation = false;
-        },
-        
-        
 
         async getNiveis() {
             console.log("getNiveis");
@@ -161,34 +168,79 @@ export default {
             }
         },
 
-        confirmUpdate() {
-            this.showModalEdit = false;
-            this.showConfirmation = true; 
+        async removeNivel(id) {
+            console.log('ID do nível:', id);
+            const nivel = this.Niveis.find((nivel) => nivel.id === id);
+            if (nivel && nivel.desenvolvedores.length > 0) {
+                this.showToast("Não é possível excluir um nivel com desenvolvedores associados!", "error");
+                return;
+            }
+            console.log('Chamando openDeleteConfirmationModal');
+            this.openDeleteConfirmationModal(id);
         },
 
-        async removeNivel(id) {
+        async deleteNivelSubmit() {
             try {
-                const response = await DeleteNivel(id);
+                const response = await DeleteNivel(this.nivelToDelete);
                 console.log("Resposta do delete", response);
                 this.getNiveis();
+                this.closeDeleteConfirmationModal();
+                this.showToast("Nível excluído com sucesso!", "success");
             } catch (error) {
                 console.error(error);
             }
         },
-        closeConfirmationModal() {
-            this.showConfirmation = false;
-            this.showModalEdit = true; 
+
+        openDeleteConfirmationModal(nivelId) {
+            this.nivelToDelete = nivelId;
+            console.log('Nivel a ser excluido: ', this.nivelToDelete);
+            this.showDeleteConfirmation = true;
+            console.log('modal aberto', this.showDeleteConfirmation);
         },
+        closeDeleteConfirmationModal() {
+            this.showDeleteConfirmation = false;
+            this.nivelToDelete = null;
+        },
+
         async updateNivelSubmit() {
             try {
                 console.log("nivel id: ",this.selectedNivel.id,"nivel name", this.selectedNivel.name);
                 const response = await UpdateNivel(this.selectedNivel.id, this.selectedNivel.name);
                 console.log("Resposta do update", response);
+                this.closeModal();
+                this.showToast("Nivel atualizado com sucesso!", "success");
                 this.getNiveis();
             } catch (error) {
                 console.error(error);
             }
         },
+
+        OpenModalEdit(Nivel) {
+            this.selectedNivel = {id: Nivel.id, name: Nivel.nivel };
+            this.showModalEdit = true;
+        },
+
+        confirmUpdate() {
+            this.showModalEdit = false;
+            this.showConfirmation = true; 
+        },
+
+        closeConfirmationModal() {
+            this.showConfirmation = false;
+            this.showModalEdit = true; 
+        },
+
+        OpenModal() {
+            this.selectedNivel = { name:"" };
+            this.showModalRegister = true;
+        },
+        
+        closeModal() {
+            this.showModalRegister = false;
+            this.showModalEdit = false;
+            this.showConfirmation = false;
+        },
+        
     },
         mounted() {
             this.getNiveis();
