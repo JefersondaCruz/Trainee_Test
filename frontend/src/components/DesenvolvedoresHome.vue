@@ -6,9 +6,11 @@
         <div class="container">
             <h2>Página de Desenvolvedores</h2>
             <p>Aqui você pode gerenciar os desenvolvedores.</p>
-            
             <button class="btn register" @click="OpenModal(true)">Registrar Desenvolvedor</button>
-            
+            <p v-if="desenvolvedores.length === 0" class="alert alert-danger" style="margin-top: 20px; text-align: center;">
+                Nenhum dev Registrado, Cadastre um desenvolvedor primeiro.
+            </p>
+
             <ul class="developer-list">
                 <li v-for="desenvolvedor in desenvolvedores" :key="desenvolvedor.id" class="developer-item">
                     <span>{{ desenvolvedor.nome }}</span>
@@ -17,6 +19,7 @@
                         <button class="btn edit" @click="OpenModalEdit(desenvolvedor)" >Editar</button>
                         <button class="btn delete" @click="openDeleteConfirmationModal(desenvolvedor.id)">Remover</button>
                     </div>
+                    
                 </li>
             </ul>
         </div>
@@ -47,7 +50,7 @@
                         <p v-if="Niveis.length === 0" class="alert alert-danger">
                             Nenhum Nivel Registrado, Cadastre um Nivel primeiro.
                         </p>
-                        
+
                         <select class="Select-form"  
                         v-model="selectedDev.nivel_id"
                         :disabled="Niveis.length === 0"

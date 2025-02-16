@@ -6,7 +6,10 @@
         <div class="container">
             <h2>Página de Niveis</h2>
             <p>Aqui você pode gerenciar os Niveis.</p>
-        <button class="btn register" @click="OpenModal(true)">Registrar Nivel</button>
+            <button class="btn register" @click="OpenModal(true)">Registrar Nivel</button>
+            <p v-if="Niveis.length === 0" class="alert alert-danger" style="margin-top: 20px; text-align: center;">
+                Nenhum Nivel Registrado, Cadastre um Nivel primeiro.
+            </p>
         <ul class="developer-list">
             <li v-for="Nivel in Niveis" :key="Nivel.id" class="developer-item">
             <span>{{ Nivel.nivel }}</span>
