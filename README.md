@@ -17,7 +17,7 @@
 ## Descrição do projeto 
 
 <p align="justify">
-  Este projeto é um sistema de recrutamento desenvolvido como parte do processo seletivo para a vaga de Trainee na 3C. Ele permite que recrutadores cadastrem vagas de emprego e que candidatos visualizem, filtrem e se candidatem a essas vagas.
+  Este projeto é um sistema de recrutamento desenvolvido como parte do processo seletivo para a vaga de Trainee na 3C. Ele permite Registrar, editar e excluir tanto Desenvolvedores como Niveis
 </p>
 
 ## Funcionalidades
