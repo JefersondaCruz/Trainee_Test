@@ -75,7 +75,7 @@ Configurar o banco de dados no arquivo .env
   php artisan migrate (executar as migrations do banco)
   php artisan serve (rodar servidor)
 ```
-- front end
+- Front End
 ```bash
   cd frontend
   npm install ( instalar as dependências)
