@@ -14,8 +14,8 @@
                     <span>{{ desenvolvedor.nome }}</span>
                     <span>{{ desenvolvedor.data_nascimento }}</span>
                     <div>
-                        <button class="btn edit" @click="editDeveloper(developer.id)">Editar</button>
-                        <button class="btn delete" @click="removeDeveloper(developer.id)">Remover</button>
+                        <button class="btn edit">Editar</button>
+                        <button class="btn delete" @click="openDeleteConfirmationModal(desenvolvedor.id)">Remover</button>
                     </div>
                 </li>
             </ul>
@@ -49,7 +49,6 @@
                                 {{ nivel.nivel }}
                             </option>
                         </select>
-
                     </div>
                     <div class="modal-footer">
                         <button 
@@ -64,12 +63,35 @@
                 </div>
             </div>
         </div>
+        <div v-if="showDeleteConfirmation" class="modal fade show d-block" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Exclusão</h5>
+                        <button type="button" class="close" @click="closeDeleteConfirmationModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Você tem certeza que deseja excluir este nível?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="deleteDeveloperSubmit">
+                            Sim, Excluir
+                        </button>
+                        <button type="button" class="btn btn-secondary" @click="closeDeleteConfirmationModal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import { RegisterDev, GetDevs } from '@/services/DevServices';
+import { RegisterDev, GetDevs, DeleteDev, UpdateDev } from '@/services/DevServices';
 import { GetNiveis } from '@/services/NiveisService';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 export default {
     data() {
@@ -77,10 +99,24 @@ export default {
             desenvolvedores: [],
             selectedDev: { nivel_id: "", nome: "", sexo: "", data_nascimento: "", hobby: "" },
             showModalRegister: false,
+            showDeleteConfirmation: false,
+            developerToDelete: null,
             Niveis: [],
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                onClick: () => this.closeModal(),
+            }).showToast();
+        },
+
         async RegisterDevSubmit() {
             console.log("dados do dev: ", this.selectedDev);
             try {
@@ -112,6 +148,32 @@ export default {
                 console.error(error);
             }
         },
+
+        openDeleteConfirmationModal(id) {
+            console.log("desenvolvedor para deletar ID: ", id);
+            this.developerToDelete = id;
+            this.showDeleteConfirmation = true;
+        },
+
+        closeDeleteConfirmationModal() {
+            this.showDeleteConfirmation = false;
+            this.developerToDelete = null;
+        },
+
+    async deleteDeveloperSubmit() {
+        try {
+            console.log("desenvolvedor para deletar: ", this.developerToDelete);
+            const response = await DeleteDev(this.developerToDelete);
+            console.log("resposta da api de deletar: ", response);
+            this.showToast("Desenvolvedor removido com sucesso!", "success");
+            this.getDesenvolvedores();
+        } catch (error) {
+            this.showToast("Erro ao remover desenvolvedor", "error");
+            console.error(error);
+        }
+
+        this.closeDeleteConfirmationModal();
+    },
 
 
         OpenModal() {
