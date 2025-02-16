@@ -44,7 +44,14 @@
                         <textarea class="form-control" v-model="selectedDev.hobby" rows="4" maxlength="255"></textarea>
                         <label for="name">Nivel do desenvolvedor: </label>
 
-                        <select class="Select-form"  v-model="selectedDev.nivel_id">
+                        <p v-if="Niveis.length === 0" class="alert alert-danger">
+                            Nenhum Nivel Registrado, Cadastre um Nivel primeiro.
+                        </p>
+                        
+                        <select class="Select-form"  
+                        v-model="selectedDev.nivel_id"
+                        :disabled="Niveis.length === 0"
+                        >
                             <option v-for="nivel in Niveis" :key="nivel.id" :value="nivel.id">
                                 {{ nivel.nivel }}
                             </option>
