@@ -26,13 +26,15 @@ export const GetDevs = async () => {
     }
 }
 
-export const UpdateDev = async (id, nome, nivel, email, cpf) => {
+export const UpdateDev = async (nivel_id, id, nome, sexo, data_nascimento, hobby) => {
     try {
-        const response = await laravelApi.patch(`/desenvolvedores/${id}`, {
+        const response = await laravelApi.put(`/desenvolvedores/${id}`, {
+            nivel_id,
+            id,
             nome,
-            nivel,
-            email,
-            cpf,
+            sexo,
+            data_nascimento,
+            hobby,
         })
         return response;
     } catch (error) {

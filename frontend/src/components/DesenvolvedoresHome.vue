@@ -14,7 +14,7 @@
                     <span>{{ desenvolvedor.nome }}</span>
                     <span>{{ desenvolvedor.data_nascimento }}</span>
                     <div>
-                        <button class="btn edit">Editar</button>
+                        <button class="btn edit" @click="OpenModalEdit(desenvolvedor)" >Editar</button>
                         <button class="btn delete" @click="openDeleteConfirmationModal(desenvolvedor.id)">Remover</button>
                     </div>
                 </li>
@@ -39,7 +39,7 @@
                         </select>
 
                         <label for="name">Data de Nascimento:</label>
-                        <input type="text" class="form-control" v-model="selectedDev.data_nascimento" />
+                        <input type="date" class="form-control" v-model="selectedDev.data_nascimento" />
                         <label for="name">seu hobby:</label>
                         <textarea class="form-control" v-model="selectedDev.hobby" rows="4" maxlength="255"></textarea>
                         <label for="name">Nivel do desenvolvedor: </label>
@@ -63,6 +63,49 @@
                 </div>
             </div>
         </div>
+        <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Atualizar Desenvolvedor</h5>
+                        <button type="button" class="close" @click="closeModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="name">Nome do Desenvolvedor:</label>
+                        <input type="text" class="form-control" v-model="selectedDev.nome"/>
+                        <label for="name">sexo:</label>
+                        <select class="Select-form" v-model="selectedDev.sexo">
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                        </select>
+
+                        <label for="name">Data de Nascimento:</label>
+                        <input type="date" class="form-control" v-model="selectedDev.data_nascimento" />
+                        <label for="name">seu hobby:</label>
+                        <textarea class="form-control" v-model="selectedDev.hobby" rows="4" maxlength="255"></textarea>
+                        <label for="name">Nivel do desenvolvedor: </label>
+
+                        <select class="Select-form"  v-model="selectedDev.nivel_id">
+                            <option v-for="nivel in Niveis" :key="nivel.id" :value="nivel.id">
+                                {{ nivel.nivel }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            type="button"
+                            class="btn btn-primary"
+                            @click="updateDeveloperSubmit"
+                        >
+                            Atualizar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @click="closeModal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div v-if="showDeleteConfirmation" class="modal fade show d-block" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -73,7 +116,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Você tem certeza que deseja excluir este nível?</p>
+                        <p>Você tem certeza que deseja excluir este Desenvolvedor?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" @click="deleteDeveloperSubmit">
@@ -102,6 +145,7 @@ export default {
             showDeleteConfirmation: false,
             developerToDelete: null,
             Niveis: [],
+            showModalEdit: false,
         };
     },
     methods: {
@@ -160,21 +204,43 @@ export default {
             this.developerToDelete = null;
         },
 
-    async deleteDeveloperSubmit() {
-        try {
-            console.log("desenvolvedor para deletar: ", this.developerToDelete);
-            const response = await DeleteDev(this.developerToDelete);
-            console.log("resposta da api de deletar: ", response);
-            this.showToast("Desenvolvedor removido com sucesso!", "success");
-            this.getDesenvolvedores();
-        } catch (error) {
-            this.showToast("Erro ao remover desenvolvedor", "error");
-            console.error(error);
-        }
+        async deleteDeveloperSubmit() {
+            try {
+                console.log("desenvolvedor para deletar: ", this.developerToDelete);
+                const response = await DeleteDev(this.developerToDelete);
+                console.log("resposta da api de deletar: ", response);
+                this.showToast("Desenvolvedor removido com sucesso!", "success");
+                this.getDesenvolvedores();
+            } catch (error) {
+                this.showToast("Erro ao remover desenvolvedor", "error");
+                console.error(error);
+            }
 
-        this.closeDeleteConfirmationModal();
-    },
+            this.closeDeleteConfirmationModal();
+        },
+        async updateDeveloperSubmit() {
+            try {
+                const response = await UpdateDev(this.selectedDev.nivel_id, this.selectedDev.id, this.selectedDev.nome, this.selectedDev.sexo, this.selectedDev.data_nascimento, this.selectedDev.hobby);
+                this.closeModal();
+                this.showToast("Desenvolvedor Atualizado com sucesso!", "success");
+                this.getDesenvolvedores();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        OpenModalEdit(desenvolvedor) {
+            this.selectedDev = {...desenvolvedor};
+            this.showModalEdit = true;
+        },
 
+        confirmUpdate() {
+            this.showModalEdit = false;
+        },
+
+        closeConfirmationModal() {
+
+            this.showModalEdit = true; 
+        },
 
         OpenModal() {
             this.selectedDev = { nivel_id: "", nome: "", sexo: "", data_nascimento: "", hobby: "" };
@@ -183,6 +249,8 @@ export default {
 
         closeModal() {
             this.showModalRegister = false;
+            this.showModalEdit = false;
+            this.showConfirmation = false;
         },
     },
     mounted() {
