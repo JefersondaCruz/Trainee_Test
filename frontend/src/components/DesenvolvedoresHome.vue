@@ -162,11 +162,10 @@ export default {
         },
 
         async RegisterDevSubmit() {
-            console.log("dados do dev: ", this.selectedDev);
+            
             try {
                 const response = await RegisterDev(this.selectedDev.nivel_id, this.selectedDev.nome, this.selectedDev.sexo, this.selectedDev.data_nascimento, this.selectedDev.hobby);
                 this.closeModal();
-                console.log("Registrado: ", response);
                 this.showToast("Desenvolvedor Registrado com sucesso!", "success");
                 this.getDesenvolvedores();
             } catch (error) {
@@ -176,7 +175,6 @@ export default {
         async getDesenvolvedores() {
             try {
                 const response = await GetDevs();
-                console.log("getDesenvolvedores resposta: ", response);
                 this.desenvolvedores = response.data.desenvolvedores;
             } catch (error) {
                 console.error(error);
@@ -187,14 +185,12 @@ export default {
             try {
                 const response = await GetNiveis();
                 this.Niveis = response.data.Niveis;
-                console.log("getNiveis resposta: ", this.Niveis);
             } catch (error) {
                 console.error(error);
             }
         },
 
         openDeleteConfirmationModal(id) {
-            console.log("desenvolvedor para deletar ID: ", id);
             this.developerToDelete = id;
             this.showDeleteConfirmation = true;
         },
@@ -206,9 +202,7 @@ export default {
 
         async deleteDeveloperSubmit() {
             try {
-                console.log("desenvolvedor para deletar: ", this.developerToDelete);
                 const response = await DeleteDev(this.developerToDelete);
-                console.log("resposta da api de deletar: ", response);
                 this.showToast("Desenvolvedor removido com sucesso!", "success");
                 this.getDesenvolvedores();
             } catch (error) {
