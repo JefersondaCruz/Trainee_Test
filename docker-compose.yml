@@ -1,3 +1,5 @@
+version: '3.8'
+
 networks:
   laravel-vue:
 
@@ -18,9 +20,7 @@ services:
       - ./backend:/var/www/html:delegated
     depends_on:
       - php
-      - redis
       - mysql
-      - mailhog
     networks:
       - laravel-vue
 
@@ -30,13 +30,20 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: Trainee_laravel_vue
-      MYSQL_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3310:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - laravel-vue
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -46,7 +53,8 @@ services:
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: root
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8002:80"
     networks:
@@ -59,19 +67,13 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
-    ports:
-      - "9001:9000"
     volumes:
       - ./backend:/var/www/html:delegated
     networks:
       - laravel-vue
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - laravel-vue
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   composer:
     build:
@@ -84,20 +86,7 @@ services:
       - ./backend:/var/www/html
     depends_on:
       - php
-    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
-    networks:
-      - laravel-vue
-
-  npm-laravel:
-    image: node:current-alpine
-    volumes:
-      - ./backend:/var/www/html
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-      - "5173:5173"
-    working_dir: /var/www/html
-    entrypoint: [ 'npm' ]
+    entrypoint: ['composer']
     networks:
       - laravel-vue
 
@@ -111,16 +100,9 @@ services:
     volumes:
       - ./backend:/var/www/html:delegated
     depends_on:
-      - mysql
-    entrypoint: [ 'php', '/var/www/html/artisan' ]
-    networks:
-      - laravel-vue
-
-  mailhog:
-    image: mailhog/mailhog:latest
-    ports:
-      - "1025:1025"
-      - "8003:8025"
+      mysql:
+        condition: service_healthy
+    entrypoint: ['php', '/var/www/html/artisan']
     networks:
       - laravel-vue
 
@@ -129,20 +111,12 @@ services:
       context: ./frontend
     ports:
       - "8085:5173"
-    stdin_open: true
     volumes:
       - './frontend:/app'
+      - '/app/node_modules'
     networks:
       - laravel-vue
-    depends_on:
-      - npm
-    entrypoint: [ "sh", "-c" ]
-    command: [ "npm install && npm run dev" ]
-  
-  npm:
-    image: node:current-alpine 
-    volumes:
-      - ./frontend:/app
     working_dir: /app
-    entrypoint: [ 'npm' ]
-    
+    command: ["npm", "run", "dev"]
+    environment:
+      - CHOKIDAR_USEPOLLING=true
